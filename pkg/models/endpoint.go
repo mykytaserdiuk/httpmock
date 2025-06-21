@@ -67,6 +67,9 @@ func (e *Endpoint) IsValid() bool {
 	}
 	return true
 }
+func (e *Endpoint) MayHaveRequest() bool {
+	return !e.Method.IsUpdating()
+}
 
 type Parameters []*Parameter
 type Parameter struct {

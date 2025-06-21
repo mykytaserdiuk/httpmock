@@ -24,13 +24,13 @@ func main() {
 						}},
 						Method: models.MethodGet,
 						Response: models.Response{
-							Header: map[string][]string{"AGENT": {"linux"}},
+							Header: map[string][]string{"Agent": {"linux"}},
 							Type:   "application/json",
 							Status: http.StatusOK,
 							Body:   "O KEY",
 						},
 						Request: models.Request{
-							Header:   map[string][]string{"AGENT": {"Chrome"}},
+							Header:   map[string][]string{"Agent": {"Chrome"}},
 							Expected: "55",
 							Type:     "application/json",
 						},
