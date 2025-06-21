@@ -1,0 +1,22 @@
+port: :8080
+paths:
+    - path: /login/{user_id}
+      endpoints:
+        - parameters:
+            - in: query
+              placeholder: user_id
+              value: "11"
+          method: GET
+          request:
+            header:
+                AGENT:
+                    - Chrome
+            expected: "55"
+            type: application/json
+          response:
+            type: application/json
+            status: 200
+            header:
+                AGENT:
+                    - linux
+            body: O KEY
