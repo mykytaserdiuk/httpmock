@@ -6,20 +6,27 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/mykytaserdiuk9/httpmock/pkg/models"
 	"net/http"
+	"net/url"
 )
 
-func (g *Generator) AddPath(path *models.Path) {
+func (r *Runner) AddPath(path *models.Path) {
 	for _, endpoint := range path.Endpoints {
-		route := g.router.HandleFunc(path.Path, func(writer http.ResponseWriter, request *http.Request) {
-			// query parameters validate
-			qmap := endpoint.Parameters.Query()
-			if len(qmap) != 0 {
+		route := r.router.HandleFunc(path.Path, func(writer http.ResponseWriter, request *http.Request) {
+			// path parameters validate
+			pathmap := endpoint.Parameters.PathVars()
+			if len(pathmap) != 0 {
 				vars := mux.Vars(request)
-				if err := ValidateVars(qmap, vars); err != nil {
-					// TODO Write to generator
+				if err := ValidatePathVars(pathmap, vars); err != nil {
+					// TODO Write to runner
 					http.Error(writer, err.Error(), http.StatusBadRequest)
 					return
 				}
+			}
+
+			querymap := endpoint.Parameters.QueryVars()
+			if err := ValidateQueryVars(querymap, request.URL.Query()); err != nil {
+				http.Error(writer, err.Error(), http.StatusBadRequest)
+				return
 			}
 
 			// request
@@ -54,13 +61,26 @@ func (g *Generator) AddPath(path *models.Path) {
 	}
 }
 
-func ValidateVars(expected, vars map[string]string) error {
+func ValidatePathVars(expected, vars map[string]string) error {
 	for k, v := range expected {
 		re := vars[k]
 		if re == "" {
 			return errors.New("there isn`t in vars variable: " + k)
 		}
 		if re != v {
+			return errors.New("Vars is not equals: " + k)
+		}
+	}
+	return nil
+}
+
+func ValidateQueryVars(expected map[string]string, values url.Values) error {
+	for k, v := range expected {
+		out := values.Get(k)
+		if out == "" {
+			return errors.New("there isn`t in vars variable: " + k)
+		}
+		if out != v {
 			return errors.New("Vars is not equals: " + k)
 		}
 	}

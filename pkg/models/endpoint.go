@@ -78,10 +78,18 @@ type Parameter struct {
 	Value       string
 }
 
-func (p Parameters) Query() map[string]string {
+func (p Parameters) PathVars() map[string]string {
+	return p.getFrom("path")
+}
+
+func (p Parameters) QueryVars() map[string]string {
+	return p.getFrom("query")
+}
+
+func (p Parameters) getFrom(in string) map[string]string {
 	resp := make(map[string]string, 0)
 	for _, par := range p {
-		if par.In == "query" {
+		if strings.ToLower(par.In) == in {
 			resp[par.Placeholder] = par.Value
 		}
 	}
