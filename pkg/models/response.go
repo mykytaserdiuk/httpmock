@@ -1,5 +1,10 @@
 package models
 
+import (
+	"errors"
+	"strconv"
+)
+
 type Response struct {
 	Type   string
 	Status int
@@ -7,12 +12,12 @@ type Response struct {
 	Body   any
 }
 
-func (r *Response) IsValid() bool {
+func (r *Response) IsValid() error {
 	// TODO validate type
 	// TODO add way to modify validators
 
 	if r.Status < 100 && r.Status > 599 {
-		return false
+		return errors.New("not allowed response status : " + strconv.Itoa(r.Status))
 	}
-	return true
+	return nil
 }

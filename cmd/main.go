@@ -20,8 +20,15 @@ func main() {
 	flag.Parse()
 
 	var mock models.MockScheme
-	err := cfg.UnmarshalYAML("./example.yaml", &mock)
+	config := &generator.Config{
+		ValidatePath:   !*noPathValidation,
+		ValidateQuery:  !*noQueryValidation,
+		ValidateHeader: !*noHeaderValidation,
+		ValidateScheme: !*noSchemeValidation,
+	}
+	err := cfg.UnmarshalYAML("./cmd/example.yaml", &mock)
 
-	err = generator.Launch(&mock)
+	runner := generator.NewRunner(config)
+	err = runner.Launch(&mock)
 	fmt.Print(err)
 }

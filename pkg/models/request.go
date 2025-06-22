@@ -6,11 +6,11 @@ type Request struct {
 	Type     string
 }
 
-func (r *Request) IsValid() bool {
+func (r *Request) IsValid() error {
 	// validate type
 
 	// if r.Expected == nil {
 	//	return false
 	// }
-	return true
+	return nil
 }
