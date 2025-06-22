@@ -3,15 +3,14 @@ package generator
 import (
 	"github.com/mykytaserdiuk9/httpmock/pkg/models"
 	"log"
-	"net/http"
 )
 
 func Launch(scheme *models.MockScheme) error {
-	generator := NewGenerator()
+	runner := NewRunner()
 	for _, path := range scheme.Paths {
-		generator.AddPath(path)
+		runner.AddPath(path)
 	}
-	err := http.ListenAndServe(scheme.Port, generator.router)
+	err := runner.Run(scheme.Port)
 	if err != nil {
 		log.Fatalf("Failed to start HTTP server. Err: %s", err.Error())
 	}
