@@ -21,5 +21,18 @@ jobs:
         with:
           go-version: '1.23.9'
 
+#      - name: Fix Import Order
+#        run: |
+#          go install github.com/daixiang0/gci@latest
+#          chmod +x ./hack/scripts/fix-import-order.sh
+#          make fix-import-order ;
+
+#      - name: Run Go linter
+#        uses: golangci/golangci-lint-action@v6
+#        with:
+#          version: v1.64.5
+
       - name: Test
-        run: go test -v ./...
+        run: |
+          chmod +x ./hack/scripts/run_test.sh
+          make go-test ;

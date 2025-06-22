@@ -52,6 +52,9 @@ type Endpoint struct {
 }
 
 func (es Endpoints) IsValid() error {
+	if len(es) == 0 {
+		return errors.New("zero endpoints one of path")
+	}
 	for _, e := range es {
 		return e.IsValid()
 	}
@@ -65,8 +68,7 @@ func (e *Endpoint) IsValid() error {
 		if err := e.Request.IsValid(); err != nil {
 			return err
 		}
-	} else {
-		// TODO add checking response value if "GETTING"
+		// TODO add checking response value if (else) "GETTING"
 	}
 
 	if err := e.Response.IsValid(); err != nil {

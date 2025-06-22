@@ -14,6 +14,7 @@ var (
 	noQueryValidation  = flag.Bool("no-query", false, "Disable query validation")
 	noHeaderValidation = flag.Bool("no-header", false, "Disable header validation")
 	noSchemeValidation = flag.Bool("no-scheme", false, "Disable scheme validation")
+	schemePath         = flag.String("path", "./cmd/example.yaml", "Path to scheme")
 )
 
 func main() {
@@ -26,9 +27,12 @@ func main() {
 		ValidateHeader: !*noHeaderValidation,
 		ValidateScheme: !*noSchemeValidation,
 	}
-	err := cfg.UnmarshalYAML("./cmd/example.yaml", &mock)
-
-	runner := generator.NewRunner(config)
-	err = runner.Launch(&mock)
-	fmt.Print(err)
+	if err := cfg.UnmarshalYAML(*schemePath, &mock); err != nil {
+		fmt.Println(err)
+	}
+	HTTPServer := generator.NewUpper(mock.Port)
+	runner := generator.NewRunner(config, HTTPServer)
+	if err := runner.Launch(&mock); err != nil {
+		fmt.Println(err)
+	}
 }
