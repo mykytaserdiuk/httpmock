@@ -3,7 +3,7 @@ paths:
     - path: /login/{user_id}
       endpoints:
         - parameters:
-            - in: query
+            - in: path
               placeholder: user_id
               value: "11"
           method: GET

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"strings"
 )
 
@@ -18,14 +19,14 @@ const (
 
 type HTTPMethod string
 
-func (m HTTPMethod) IsValid() bool {
+func (m HTTPMethod) IsValid() error {
 	switch strings.ToUpper(string(m)) {
 	case string(MethodGet), string(MethodHead), string(MethodPost),
 		string(MethodPut), string(MethodPatch), string(MethodDelete),
 		string(MethodConnect), string(MethodOptions), string(MethodTrace):
-		return true
+		return nil
 	default:
-		return false
+		return errors.New("not allowed method : " + m.String())
 	}
 }
 func (m HTTPMethod) IsUpdating() bool {
@@ -50,22 +51,28 @@ type Endpoint struct {
 	Response   Response
 }
 
-func (e *Endpoint) IsValid() bool {
-	if ok := e.Method.IsValid(); !ok {
-		return false
+func (es Endpoints) IsValid() error {
+	for _, e := range es {
+		return e.IsValid()
+	}
+	return nil
+}
+func (e *Endpoint) IsValid() error {
+	if err := e.Method.IsValid(); err != nil {
+		return err
 	}
 	if e.Method.IsUpdating() {
-		if ok := e.Request.IsValid(); !ok {
-			return false
+		if err := e.Request.IsValid(); err != nil {
+			return err
 		}
 	} else {
 		// TODO add checking response value if "GETTING"
 	}
 
-	if ok := e.Response.IsValid(); !ok {
-		return false
+	if err := e.Response.IsValid(); err != nil {
+		return errors.New("response is not valid : " + err.Error())
 	}
-	return true
+	return nil
 }
 func (e *Endpoint) MayHaveRequest() bool {
 	return !e.Method.IsUpdating()
