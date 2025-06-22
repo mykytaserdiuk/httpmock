@@ -15,3 +15,7 @@ func UnmarshalYAML(path string, dest any) error {
 
 	return yaml.Unmarshal(b, dest)
 }
+
+func UnmarshalYAMLAsText(data string, dest any) error {
+	return yaml.Unmarshal([]byte(data), dest)
+}

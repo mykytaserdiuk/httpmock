@@ -11,7 +11,7 @@ import (
 	"net/url"
 )
 
-func (r *Runner) AddPath(path *models.Path) {
+func (r *Runner) addPath(path *models.Path) {
 	responser := writer.NewResponser(path.Path)
 
 	for _, endpoint := range path.Endpoints {
