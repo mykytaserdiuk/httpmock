@@ -1,8 +1,11 @@
 # Plans
-* Add cases of Response in endpoint
-* Realize a normal error response
-* Add normal validator for request (Where is error (num of path, endpoint, request, etc))
-* Add normal response in error
+- Implement schema fetching from a URL.
+- Add response cases in the endpoint.
+
+# TODO
+- Add a validator for requests (indicate where the error occurred: path, endpoint, request, etc.).
+- Dockerize the application.
 
 ## Tests
-* Change test with dataManipulation(*models.MockSchema)
+- Update tests to use `dataManipulation(*models.MockSchema)`.
+- Write tests for the `schema.Get` function.
