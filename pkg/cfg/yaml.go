@@ -19,3 +19,6 @@ func UnmarshalYAML(path string, dest any) error {
 func UnmarshalYAMLAsText(data string, dest any) error {
 	return yaml.Unmarshal([]byte(data), dest)
 }
+func UnmarshalYAMLRaw(data []byte, dest any) error {
+	return yaml.Unmarshal(data, dest)
+}
